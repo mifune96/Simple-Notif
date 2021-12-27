@@ -3,14 +3,18 @@ package com.tomuchcoffee.simplenotif
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.NotificationCompat
+import java.net.URI
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,9 +31,16 @@ class MainActivity : AppCompatActivity() {
 
     //aksi untuk onClick pada button
     fun sendNotification(view: View) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://dicoding.com"))
+        val pendingItent = PendingIntent.getActivity(
+            this, 0, intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        )
+
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val mBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentIntent(pendingItent)
             .setSmallIcon(R.drawable.ic_baseline_notifications_24)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
